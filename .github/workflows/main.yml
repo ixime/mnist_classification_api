@@ -38,11 +38,10 @@ jobs:
         flake8
     - name: Coverage report and testing
       env:
-        POSTGRESQL_USER: postgres
-        POSTGRESQL_PASSWORD: postgres
-        POSTGRESQL_DB_NAME: postgres
-        POSTGRESQL_HOST: postgres
-        POSTGRESQL_PORT: 5432
+        DB_HOST: postgres
+        DB_NAME: postgres
+        DB_USER: postgres
+        DB_PASS: postgres
       run: |
         pip install coverage
         coverage run --parallel-mode --source='app' --omit="./app/manage.py,./*/migrations/*" ./app/manage.py test

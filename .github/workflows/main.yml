@@ -18,15 +18,16 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-          - 5432:5432
+          - 5433:5432
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
+    - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.7
     - name: Prerequisites
-      run: sudo apt-get install libpq-dev
+      run: |
+        sudo apt-get install libpq-dev
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
@@ -37,7 +38,7 @@ jobs:
         POSTGRESQL_PASSWORD: postgres
         POSTGRESQL_DB_NAME: postgres
         POSTGRESQL_HOST: "localhost"
-        POSTGRESQL_PORT: 5432
+        POSTGRESQL_PORT: 5433
       run: |
         python3 ./app/manage.py wait_for_db
         python3 ./app/manage.py migrate
@@ -50,7 +51,7 @@ jobs:
         POSTGRESQL_PASSWORD: postgres
         POSTGRESQL_DB_NAME: postgres
         POSTGRESQL_HOST: "localhost"
-        POSTGRESQL_PORT: 5432
+        POSTGRESQL_PORT: 5433
       run: |
         pip install coverage
         coverage run --parallel-mode --source='app' --omit="./app/manage.py,./*/migrations/*" ./app/manage.py test

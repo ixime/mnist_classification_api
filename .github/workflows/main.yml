@@ -10,6 +10,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgis/postgis:12-master
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8

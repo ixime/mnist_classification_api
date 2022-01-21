@@ -22,6 +22,7 @@ jobs:
         pip install -r requirements.txt
     - name: Setup DB
       run: |
+        python3 ./app/manage.py wait_for_db
         python3 ./app/manage.py makemigrations
         python3 ./app/manage.py migrate
     - name: Linting

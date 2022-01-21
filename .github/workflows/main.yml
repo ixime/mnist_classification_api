@@ -33,17 +33,6 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Setup DB
-      env:
-        POSTGRESQL_USER: postgres
-        POSTGRESQL_PASSWORD: postgres
-        POSTGRESQL_DB_NAME: postgres
-        POSTGRESQL_HOST: postgres
-        POSTGRESQL_PORT: 5432
-      run: |
-        python3 ./app/manage.py wait_for_db
-        python3 ./app/manage.py migrate
-        python3 ./app/manage.py runserver 0.0.0.0:8000
     - name: Linting
       run: |
         flake8

@@ -27,3 +27,6 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Label)
+admin.site.register(models.Csvfile)
+admin.site.register(models.Dataset)
+admin.site.register(models.Image)

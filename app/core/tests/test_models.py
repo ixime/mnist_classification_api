@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -50,3 +52,43 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(label), label.name)
+
+    def test_csvfile_str(self):
+        """Test the csvfile string representation"""
+        csvfile = models.Csvfile.objects.create(
+            user=sample_user(),
+            name='mnist_train.csv',
+            labelcol=0,
+            imgcolstart=1,
+            imgcolend=16
+        )
+
+        self.assertEqual(str(csvfile), csvfile.name)
+
+    def test_dataset_str(self):
+        """Test the dataset string representation"""
+        dataset = models.Dataset.objects.create(
+            user=sample_user(),
+            name='MNIST'
+        )
+
+        self.assertEqual(str(dataset), dataset.name)
+
+#    def test_image_str(self):
+#        """Test the image string representation"""
+#        image = models.Dataset.objects.create(
+#            user=sample_user(),
+#            name='001.jpg'
+#        )
+
+#        self.assertEqual(str(image), f'{image.csvfile}_{image.id}')
+
+    @patch('uuid.uuid4')
+    def test_image_file_name_uuid(self, mock_uuid):
+        """Test that image is saved in the correct location"""
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+        file_path = models.dataset_file_path(None, 'myimage.jpg')
+
+        exp_path = f'uploads/dataset/{uuid}.jpg'
+        self.assertEqual(file_path, exp_path)

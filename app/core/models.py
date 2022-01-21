@@ -1,7 +1,18 @@
+import uuid
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
                                         PermissionsMixin
 from django.conf import settings
+
+
+def dataset_file_path(instance, filename):
+    """Generate file path for new dataset file"""
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+
+    return os.path.join('uploads/dataset/', filename)
 
 
 class UserManager(BaseUserManager):
@@ -45,6 +56,61 @@ class Label(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
+    def __str__(self):
+        return self.name
+
+
+class Csvfile(models.Model):
+    """Csvfile to be used to populate the dataset"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    description = models.TextField(blank=True)
+    labelcol = models.IntegerField()
+    imgcolstart = models.IntegerField()
+    imgcolend = models.IntegerField()
+    file = models.FileField(null=True, upload_to=dataset_file_path)
+
+    def __str__(self):
+        return self.name
+
+
+class Dataset(models.Model):
+    """Dataset to be used for training a model and prediction"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    description = models.TextField(blank=True)
+    labels = models.ManyToManyField(Label)
+    csvfiles = models.ManyToManyField(Csvfile)
+
+    def __str__(self):
+        return self.name
+
+
+class Image(models.Model):
+    """Image in a dataset"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    csvfile = models.ForeignKey(
+        Csvfile,
+        on_delete=models.CASCADE
+    )
+    row = models.IntegerField()
+    label = models.ForeignKey(
+        Label,
+        on_delete=models.CASCADE
+    )
+    image = models.ImageField(null=True, upload_to=dataset_file_path)
+    img_array = models.FileField(null=True, upload_to=dataset_file_path)
 
     def __str__(self):
         return self.name

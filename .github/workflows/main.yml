@@ -35,7 +35,7 @@ jobs:
         pip install -r requirements.txt
     - name: Setup DB
       env:
-        DB_HOST: postgres
+        DB_HOST: "localhost"
         DB_NAME: postgres
         DB_USER: postgres
         DB_PASS: postgres
@@ -47,7 +47,7 @@ jobs:
         flake8
     - name: Coverage report and testing
       env:
-        DB_HOST: postgres
+        DB_HOST: "localhost"
         DB_NAME: postgres
         DB_USER: postgres
         DB_PASS: postgres

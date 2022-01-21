@@ -53,5 +53,6 @@ jobs:
         DB_PASS: postgres
       run: |
         pip install coverage
-        coverage run --source="./app/app/,./app/core/,./app/dataset/,./app/label/,./app/user/" ./app/manage.py test tests
+        coverage run --source="./app/core/,./app/dataset/,./app/label/,./app/user/" ./app/manage.py test
+        python3 ./app/manage.py test
         coverage report -m

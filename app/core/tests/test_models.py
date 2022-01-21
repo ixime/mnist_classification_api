@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
 
 def sample_user(email='hi@me.com', password='passwrd'):
     """Create a sample user"""
@@ -39,3 +41,12 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_label_str(self):
+        """Test the label string representation"""
+        label = models.Label.objects.create(
+            user=sample_user(),
+            name='shirt'
+        )
+
+        self.assertEqual(str(label), label.name)

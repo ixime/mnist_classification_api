@@ -53,5 +53,5 @@ jobs:
         DB_PASS: postgres
       run: |
         pip install coverage
-        coverage run --parallel-mode --omit="./app/manage.py,./*/migrations/*" ./app/manage.py test
+        coverage run ./app/manage.py test tests
         coverage report -m

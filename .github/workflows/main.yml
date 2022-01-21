@@ -33,6 +33,15 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Setup DB
+      env:
+        DB_HOST: postgres
+        DB_NAME: postgres
+        DB_USER: postgres
+        DB_PASS: postgres
+      run: |
+        python3 ./app/manage.py wait_for_db
+        python3 ./app/manage.py migrate
     - name: Linting
       run: |
         flake8
@@ -44,5 +53,5 @@ jobs:
         DB_PASS: postgres
       run: |
         pip install coverage
-        coverage run --omit="manage.py,./*/migrations/*" manage.py test
+        coverage run --parallel-mode --source='app' --omit="./app/manage.py,./*/migrations/*" ./app/manage.py test
         coverage report

@@ -26,5 +26,5 @@ jobs:
     - name: Coverage report and testing
       run: |
         pip install coverage
-        coverage run manage.py test
+        coverage run --parallel-mode --branch --source='app' ./app/manage.py test
         coverage report
